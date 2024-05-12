@@ -13,3 +13,4 @@ class CommonResponse(BaseModel, Generic[T]):
 
 class StaticString:
     DOG_IMAGE_SOURCE = "https://dog.ceo/api/breeds/image/random"
+    INVALID_INPUT = "Please introduce any number between 1 and 8"

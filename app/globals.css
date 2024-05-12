@@ -41,3 +41,49 @@ body {
 ::after {
   --tw-content: '';
 }
+
+.ant-carousel {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 10px 0 0 0;
+}
+
+.ant-carousel .slick-prev,
+.ant-carousel .slick-prev:hover,
+.ant-carousel .slick-prev:focus {
+  font-size: inherit;
+  left: 10px;
+  z-index: 2;
+  color: green;
+}
+
+.ant-carousel .slick-next,
+.ant-carousel .slick-next:hover,
+.ant-carousel .slick-next:focus {
+  font-size: inherit;
+  right: 10px;
+  z-index: 2;
+  color: green;
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.animate-typing {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typing 4s steps(30, end) forwards;
+}
+
+.rainbow-text {
+  background-image: linear-gradient(45deg, #FFC700, #FF8A00, #FF0038, #B80058, #9000FF, #3D52D5, #0079FF, #00C2FF, #00FFAA);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}

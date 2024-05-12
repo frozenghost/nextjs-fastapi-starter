@@ -1,0 +1,29 @@
+# docker-compose.yml
+
+version: '3'
+
+services:
+  app:
+    build: ./app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+  api:
+    build: ./api
+    ports:
+      - "8000:8000"
+    environment:
+      - SQLALCHEMY_DATABASE_URL=postgresql://root:BOpQjE99ra5g@localhost/chatbot
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_DB: chatbot
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: BOpQjE99ra5g
+    ports:
+      - "5432:5432"
