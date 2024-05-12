@@ -8,16 +8,14 @@ import type { SearchProps } from 'antd/es/input/Search';
 import { useState, useRef, useEffect } from "react";
 import { UserInput } from "./components/user_input";
 
-export enum MessageType {
+enum MessageType {
   Text,
   Swiper
 }
 
-type MessageKeys = keyof typeof MessageType;
-
-export class Message {
-  type: MessageType;
-  title: string;
+export interface Message {
+  type?: MessageType;
+  title?: string;
   contents?: any;
 }
 
