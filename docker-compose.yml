@@ -4,14 +4,18 @@ version: '3'
 
 services:
   app:
-    build: ./app
+    build:
+      context: ./app
+      dockerfile: ./app.dockerfile
     ports:
       - "3000:3000"
     depends_on:
       - api
 
   api:
-    build: ./api
+    build:
+      context: ./api
+      dockerfile: ./api.dockerfile
     ports:
       - "8000:8000"
     environment:
