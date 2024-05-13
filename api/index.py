@@ -1,11 +1,12 @@
-from fastapi import FastAPI, HTTPException
+from time import time
+import api.settings
+from fastapi import BackgroundTasks, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 
-from api.dtos.dog_breed import DogBreedRequest
+from api.database.database import ChatHistory, async_session, engine
 from api.common import CommonResponse, StaticString
-from pydantic import conint
 
 import aiohttp
 import asyncio
@@ -22,27 +23,46 @@ app.add_middleware(
 )
 
 @app.get("/api/dog_breed/",response_model=CommonResponse)
-async def get_dog_breed(input:conint(ge=1, le=8)):
-    if 1 <= input <= 8:
+async def get_dog_breed(input:str, background_tasks: BackgroundTasks):
+    start_time = time()
+    history = ChatHistory();
+    history.input_value = input
+    if input.isdigit() and 1 <= int(input) <= 8:
+        history.valid_input = True
         # Generate random dog images
         dog_images = []
         task_list = []
         async with aiohttp.ClientSession() as session:
-            for _ in range(input):
+            for _ in range(int(input)):
                 task = asyncio.create_task(get_dog_breed_image(session))
                 task_list.append(task)
             
             done, pending = await asyncio.wait(task_list, timeout=None)
             for done_task in done:
                 dog_images.append(done_task.result())
-            # Save chat history
-            # await save_chat_history(input_text, True, dog_images)
 
+            history.images = dog_images
+            end_time = time()
+            history.execute_duration = (end_time - start_time) * 1000
+            background_tasks.add_task(save_chat_history, history)
             return CommonResponse(data=dog_images)
     else:
+        history.valid_input = False
+        end_time = time()
+        history.execute_duration = (end_time - start_time) * 1000
+        await save_chat_history(history=history)
         # Invalid input
         # await save_chat_history(input_text, False, "Please introduce any number between 1 and 8")
         raise HTTPException(status_code=400, detail="Please introduce any number between 1 and 8")
+    # finally:
+    #     background_tasks.add_task(save_chat_history, history)
+    
+    
+async def save_chat_history(history):
+    async with async_session() as session:
+        session.add(history)
+        await session.commit()
+
 
 
 async def get_dog_breed_image(session: aiohttp.ClientSession) -> str:
