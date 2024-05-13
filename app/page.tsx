@@ -96,16 +96,17 @@ export default function Home() {
                       <Carousel autoplay arrows prevArrow={<LeftOutlined />} nextArrow={<RightOutlined />}>
                         {message.contents.map((image:string, idx:number) => (
                           <div key={idx} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
-                            <div style={{ backgroundColor: '#d6dbdc', height: '100%', display: 'flex', justifyContent: 'center' }}>
-                              <Image
-                                src={image}
-                                style={{ height: '300px', width: '400px', objectFit: 'contain', margin: 'auto' }}
-                                placeholder={
-                                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                    <Spin size="large" />
-                                  </div>
-                                }
-                              />
+                            <div style={{ backgroundColor: '#d6dbdc', height: '100%', display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
+                                <Image
+                                  src={image}
+                                  style={{ height: '300px', width: '400px', objectFit: 'contain', margin: 'auto' }}
+                                  placeholder={
+                                    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                      <Spin size="large" />
+                                    </div>
+                                  }
+                                />
+                                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: "25px", color: "darkviolet" }}>{image.split('/')[4]}</div>
                             </div>
                           </div>
                         ))}
